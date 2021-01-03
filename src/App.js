@@ -14,9 +14,15 @@ import { sortData, prettyPrintStat } from "./util";
 import numeral from "numeral";
 import Map from "./Map";
 import "leaflet/dist/leaflet.css";
+import LineChart from "./LineChart";
+import PieChar from "./PieChar";
+import SmallScreeApp from "./SmallScreeApp";
+import useWindowDimensions from "./size";
+import Footer from "./Footer";
 
 const App = () => {
   const [country, setInputCountry] = useState("worldwide");
+  const [cName, setCName] = useState("worldwide");
   const [countryInfo, setCountryInfo] = useState({});
   const [countries, setCountries] = useState([]);
   const [mapCountries, setMapCountries] = useState([]);
@@ -24,6 +30,9 @@ const App = () => {
   const [casesType, setCasesType] = useState("cases");
   const [mapCenter, setMapCenter] = useState({ lat: 34.80746, lng: -40.4796 });
   const [mapZoom, setMapZoom] = useState(3);
+  const [appData, setData] = useState([])
+  const { width } = useWindowDimensions();
+
 
   useEffect(() => {
     fetch("https://disease.sh/v3/covid-19/all")
@@ -38,6 +47,7 @@ const App = () => {
       fetch("https://disease.sh/v3/covid-19/countries")
         .then((response) => response.json())
         .then((data) => {
+          console.log("this is the dataaaaa  from khata  ", data)
           const countries = data.map((country) => ({
             name: country.country,
             value: country.countryInfo.iso2,
@@ -56,7 +66,7 @@ const App = () => {
 
   const onCountryChange = async (e) => {
     const countryCode = e.target.value;
-
+    setCName(countryCode)
     const url =
       countryCode === "worldwide"
         ? "https://disease.sh/v3/covid-19/all"
@@ -64,27 +74,31 @@ const App = () => {
     await fetch(url)
       .then((response) => response.json())
       .then((data) => {
+        // console.log("this is the dataaaaa  from khata  ", data)
         setInputCountry(countryCode);
+        // const newData = countryCode === "worldwide" ? data : data.countryInfo
         setCountryInfo(data);
-        setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+        countryCode !== "worldwide" && setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
         setMapZoom(4);
       });
   };
 
   return (
+    width > 1000 ?
+    <div>
     <div className="app">
       <div className="app__left">
         <div className="app__header">
-          <h1>COVID-19 Tracker</h1>
+          <h1 className="heading">COVID-19 Tracker</h1>
           <FormControl className="app__dropdown">
             <Select
               variant="outlined"
               value={country}
               onChange={onCountryChange}
             >
-              <MenuItem value="worldwide">Worldwide</MenuItem>
+              <MenuItem value="worldwide"  >Worldwide</MenuItem>
               {countries.map((country) => (
-                <MenuItem value={country.value}>{country.name}</MenuItem>
+                <MenuItem value={country.name}>{country.name}</MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -92,8 +106,8 @@ const App = () => {
         <div className="app__stats">
           <InfoBox
             onClick={(e) => setCasesType("cases")}
-            title="Coronavirus Cases"
-            isRed
+            title="Active Cases"
+            isBlue
             active={casesType === "cases"}
             cases={prettyPrintStat(countryInfo.todayCases)}
             total={numeral(countryInfo.cases).format("0.0a")}
@@ -101,6 +115,7 @@ const App = () => {
           <InfoBox
             onClick={(e) => setCasesType("recovered")}
             title="Recovered"
+            isGreen
             active={casesType === "recovered"}
             cases={prettyPrintStat(countryInfo.todayRecovered)}
             total={numeral(countryInfo.recovered).format("0.0a")}
@@ -114,6 +129,10 @@ const App = () => {
             total={numeral(countryInfo.deaths).format("0.0a")}
           />
         </div>
+        <div style={{marginTop:"12px", marginBottom:"8px"}}>
+          <LineChart cases={countryInfo.cases} deaths={countryInfo.deaths} recovered={countryInfo.recovered} country={countryInfo.country}/>
+
+        </div>
         <Map
           countries={mapCountries}
           casesType={casesType}
@@ -121,17 +140,30 @@ const App = () => {
           zoom={mapZoom}
         />
       </div>
-      <Card className="app__right">
-        <CardContent>
-          <div className="app__information">
-            <h3>Live Cases by Country</h3>
-            <Table countries={tableData} />
-            <h3>Worldwide new {casesType}</h3>
-            <LineGraph casesType={casesType} />
+      <div>
+        <Card className="app__right">
+          <CardContent>
+            <div className="app__information">
+              <h3>Live Cases by Country</h3>
+              <Table fromFull data={appData} countries={tableData} />
+            </div>
+          </CardContent>
+        </Card>
+        {/* <Card style={{marginTop:"13px"}}>
+          <CardContent> */}
+              {/* <h3>{cName} new {casesType}</h3> */}
+              <LineGraph fromFull setAppData={setData} casesType={casesType} color={casesType === "cases" ? "#7f7fff" : casesType === "recovered" ? "#a1d350" : "#ff0000"} country={cName}/>
+          {/* </CardContent>
+        </Card> */}
+        <div style={{marginTop:"13px"}}>
+                <PieChar fromFull appData={appData} cases={{deaths:countryInfo.deaths, recovered:countryInfo.recovered, cases:countryInfo.cases}} country={countryInfo.country}/>
           </div>
-        </CardContent>
-      </Card>
+      </div>
     </div>
+      <Footer/>
+    </div> 
+
+    : <SmallScreeApp country={country} cName={cName} setCName={setCName} countryInfo={countryInfo} countries={countries} mapCountries={mapCountries} tableData={tableData}  casesType={casesType} setCasesType={setCasesType} mapCenter={mapCenter} mapZoom={mapZoom} onCountryChange={onCountryChange}/>
   );
 };
 

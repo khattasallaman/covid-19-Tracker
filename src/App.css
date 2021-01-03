@@ -25,13 +25,16 @@ body {
 }
 
 .app__header > h1 {
-  color: #fc3c3c;
+  color: #364f6b;
   font-size: 2rem;
 }
 
-.app__stats {
+.app__stats, .app__stats_small  {
   display: flex;
   justify-content: space-between;
+}
+.app__stats_small {
+  margin-top: 15px;
 }
 
 .app__left {
@@ -44,7 +47,6 @@ body {
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
-
 .app__information > h3:last-of-type {
   margin-top: 1rem;
 }
@@ -53,4 +55,30 @@ body {
   .app {
     flex-direction: column;
   }
+}
+
+.pieWithout {
+  margin-top: 22px;
+}
+.beginning{
+  height: 500px;
+}
+.heading {
+  font-family: Garamond , Georgia, Garamond ;
+}
+.footer-style, .footer-small-screen {
+  background-color: #2323be;
+  color: rgb(203, 201, 219);
+  font-size: 1em;
+  border: 2px solid #1616c0;
+  border-top-left-radius: 3px;
+  text-align: center;
+  padding: -4px;
+}
+.footer-small-screen {
+  font-size: .9em;
+}
+.red-footer{
+  background-color: #d32424;
+  border: 2px solid #d32424;
 }

@@ -13,13 +13,19 @@
 .infoBox--red {
   border-color: red;
 }
+.infoBox--blue{
+  border-color: rgba(0, 0, 255, 0.5);
+}
 
 .infoBox__cases--green {
-  color: lightgreen !important;
+  color: #a1d350 !important;
+}
+.infoBox__cases--blue {
+  color: #7f7fff !important;
 }
 
 .infoBox__cases {
-  color: #cc1034;
+  color: #e2423f;
   font-weight: 600;
   font-size: 1.75rem;
   margin-bottom: 0.5rem;

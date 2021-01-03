@@ -4,9 +4,9 @@ import { Circle, Popup } from "react-leaflet";
 
 const casesTypeColors = {
   cases: {
-    hex: "#CC1034",
-    rgb: "rgb(204, 16, 52)",
-    half_op: "rgba(204, 16, 52, 0.5)",
+    hex: "#7f7fff",
+    rgb: "rgb(0, 0, 255)",
+    half_op: " rgba(0, 0, 255, 0.5)",
     multiplier: 800,
   },
   recovered: {
@@ -46,7 +46,7 @@ export const showDataOnMap = (data, casesType = "cases") =>
       fillColor={casesTypeColors[casesType].hex}
       fillOpacity={0.4}
       radius={
-        Math.sqrt(country[casesType]) * casesTypeColors[casesType].multiplier
+        (Math.sqrt(country[casesType]) * casesTypeColors[casesType].multiplier)/2
       }
     >
       <Popup>
@@ -69,3 +69,8 @@ export const showDataOnMap = (data, casesType = "cases") =>
       </Popup>
     </Circle>
   ));
+
+  export const rounding = (number) => {
+    let fixed = number.toFixed(2);
+ return parseFloat(fixed) 
+}

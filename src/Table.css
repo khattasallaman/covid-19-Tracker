@@ -1,9 +1,12 @@
-.table {
+.table, .tablewithout {
   margin-top: 20px;
   overflow: scroll;
   color: #6a5d5d;
   background-color: white;
   height: 400px;
+}
+.tablewithout{
+  height: 517px;
 }
 
 .table tr {
@@ -17,5 +20,5 @@
 }
 
 .table tr:nth-of-type(odd) {
-  background-color: #f3f2f8;
+  background-color: #f7f2f8;
 }
