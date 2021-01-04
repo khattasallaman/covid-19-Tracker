@@ -85,7 +85,6 @@ const App = () => {
 
   return (
     width > 1000 ?
-    <div>
     <div className="app">
       <div className="app__left">
         <div className="app__header">
@@ -160,8 +159,6 @@ const App = () => {
           </div>
       </div>
     </div>
-      <Footer/>
-    </div> 
 
     : <SmallScreeApp country={country} cName={cName} setCName={setCName} countryInfo={countryInfo} countries={countries} mapCountries={mapCountries} tableData={tableData}  casesType={casesType} setCasesType={setCasesType} mapCenter={mapCenter} mapZoom={mapZoom} onCountryChange={onCountryChange}/>
   );

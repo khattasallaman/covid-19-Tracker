@@ -93,7 +93,6 @@ const SmallScreeApp = ({country, cName, countryInfo, countries, mapCountries, ta
           center={mapCenter}
           zoom={mapZoom}
         />
-        <Footer/>
     </div>
   );
 };
